@@ -1,0 +1,175 @@
+syntax = "proto2";
+
+message Quantity {
+    required string type = 1;
+    optional uint32 quantity = 2;
+}
+
+message PlayerParams {
+    optional uint64 timestamp       = 1;
+    optional string username        = 2;
+    optional uint32 unk5            = 5; // 1 
+    optional bytes  unk7            = 7; // [0001030407] <- character custom?
+    optional string unk8            = 8; // ""
+    optional uint32 unk9            = 9; // 250
+    optional uint32 unk10           = 10; // 350
+    optional string unk11           = 11; // ""
+    optional string unk12           = 12; // ""
+    optional string unk13           = 13; // ""
+    repeated Quantity quantity      = 14;
+}
+
+message GameReady {
+    required uint32 id     = 1;    
+    required uint64 ts     = 2;
+    required uint64 ts_ms  = 3; // maybe first login date? or first day of the month
+}
+
+message WorldObjects {
+    repeated WorldObject object     = 1;
+    required uint64 timestamp       = 2;
+}
+
+// TODO
+message WorldObject {
+    required string asset_id        = 1;
+    required bytes data             = 2;
+    required uint64 spawn_time      = 3;
+    required float unk4             = 4;
+    required uint32 unk5            = 5;
+    required bytes unk6             = 6;
+}
+
+message GameContainer {
+    required int32 id               = 1;
+    optional bytes params           = 2;
+}
+
+message TokenContainer {
+    required string hash            = 2; // 4a2e...2e
+    optional InfoContainer infos    = 3;
+
+    message InfoContainer {
+        required Something2 s2      = 2;
+        required Something3 s3      = 3;
+        required Something5 s5      = 5;
+        required string version     = 6; // "0.29.0"
+
+        message Something2 {
+            required double unk1    = 1; // 40.0
+            required uint32 unk2    = 2; // 10
+            required uint32 unk3    = 3; // 1
+            required double unk4    = 4; // 2.0
+            required double unk6    = 6; // 1000.0
+        }
+
+        message Something3 {
+            required double unk1    = 1; // 100.0
+            required double unk2    = 2; // 200.0
+            required double unk3    = 3; // 50.0
+            required float  unk4    = 4; // 5.0
+            required float  unk5    = 5; // 30.0
+            required float  unk6    = 6; // 10.0
+            required string token   = 7; // AI....M
+        }
+
+        message Something5 {
+            required uint32 unk1    = 1; // 1000
+            required uint32 unk2    = 2; // 1000
+            required uint32 unk3    = 3; // 250
+            required uint32 unk4    = 4; // 350
+            required uint32 unk5    = 5; // 9
+        }
+    }
+}
+
+// ----------------------------------------------
+
+message GamePacket {
+    optional uint64 unk_timestamp = 1;
+    required uint64 timestamp = 2;
+    repeated bytes state      = 3; // why bytes and not State?
+}
+
+message State {
+    optional uint64 timestamp = 1;
+    required Data data        = 3;
+
+    message Data {
+        oneof Selection {
+            Pokemon   p                 = 1;
+            Unknown2  u2                = 2;
+            Unknown3  u3                = 3;
+            Unknown4  u4                = 4;
+            EggIncubatorList incubator  = 9;
+            Unknown10 u10               = 10;
+        }
+    }
+}
+
+message Pokemon {
+    required fixed64 uuid               = 1;
+    optional uint32  pokedex_id         = 2;
+    optional uint32  combat_power       = 3;
+    optional uint32  current_hp         = 4;
+    optional uint32  max_hp             = 5;
+    optional uint32  move_1             = 6;
+    optional uint32  move_2             = 7;
+    optional uint32  deployed_fort_id   = 8;
+    optional string  owner_name         = 9;
+    optional bool    is_egg             = 10; // isEgg?
+    optional double  egg_walked_target  = 11; // EggKmWalkedTarget?
+    optional double  egg_walked_start   = 12; // EggKmWalkedStart?
+                                              // Origin?
+    optional float   height             = 15;
+    optional float   weight             = 16;
+    optional uint32  individual_attack  = 17;
+    optional uint32  individual_defense = 18;
+    optional uint32  individual_stamina = 19;
+    optional float   cp_multiplier      = 20;
+    optional bool    unk_bool21         = 21;
+    optional uint64  captured_s2_cellid = 22;
+    optional uint32  battles_attacked   = 23; // not sure
+    optional uint32  battles_defended   = 24; // not sure
+    optional uint32  egg_incubator_id   = 25; // not sure
+    optional uint64  creation_time_ms   = 26; // aka catch time
+    optional uint32  num_upgrades       = 27;
+    optional float   additional_cp_mult = 28;
+    optional bool    favorite           = 29;
+    optional string  nickname           = 30;
+    optional uint32  from_fort          = 31; // from a pokestop
+}
+
+message Unknown2 {
+    required uint32 unk1                = 1;
+    required uint32 unk2                = 2;
+}
+
+message Unknown3 {
+    required uint32 maybe_pokedex_id    = 1;
+    required uint32 unk2                = 2;
+    optional uint32 unk3                = 3;
+}
+
+// Maybe stats (1,2,...12,14,15,18,20,21,22,23). All integers except 22
+// which is a binary blob <- character customization?
+message Unknown4 {
+}
+
+message Unknown10 {
+    required uint32 maybe_pokedex_id    = 1;
+    optional uint32 unk2                = 2;
+}
+
+message EggIncubatorList {
+    repeated EggIncubator egg = 1;
+
+    message EggIncubator {
+        required string name            = 1; // "EggIncubatorProto-..."
+        required uint32 unk2            = 2; // 901; 902
+        required uint32 unk3            = 3; // 1
+        optional uint32 remaining       = 5; // 1
+        required fixed64 unk6           = 6; // 7.xxx; 4.3xx
+        required fixed64 unk7           = 7; // 9.xxx; 9.3xx
+    }
+}

@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+import "shared.proto";
+
+message AuthCookie {
+    required bytes token1       = 1;
+    required uint64 timestamp   = 2;
+    required bytes token2       = 3;
+}
+
+enum AuthServerCodes {
+    CMD_OK          = 1;
+    CMD_NOPE        = 2;
+    CMD_REDIRECT    = 53;
+}
+
+message AuthServer {
+    required uint32 type        = 1;
+    required uint64 uid         = 2;
+    optional string redirect_to = 3;
+    optional DaFaqIsThis horror = 6;
+    optional AuthCookie cookie  = 7;
+    repeated bytes game         = 100;
+}

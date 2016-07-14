@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+import "shared.proto";
+
+message AuthClient {
+    required AuthClientTypes type       = 1;
+    required uint64 rpc_id              = 3;
+    repeated AuthInfo info              = 4;
+    required DaFaqIsThis monster        = 6;
+    optional double gpsx                = 7;
+    optional double gpsy                = 8;
+    optional double gpsz                = 9;
+    optional AuthToken auth             = 10;
+    optional uint64 unk12               = 12;
+}
+
+message AuthInfo {
+    required int32 id                   = 1;
+    optional bytes data                 = 2;
+}
+
+message TokenType {
+    required string token               = 1;    
+}
+
+message AuthToken {
+    required string method = 1;    
+    required TokenType token = 2;    
+}

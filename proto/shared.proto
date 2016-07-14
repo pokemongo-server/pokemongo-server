@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+enum AuthClientTypes{
+    STANDARD    = 2;
+}
+
+message HorrorContainer {
+    optional bytes horror = 1;    
+}
+
+message DaFaqIsThis {
+    required int32 unk0 = 1;
+    optional HorrorContainer hc = 2;
+}
